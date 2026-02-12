@@ -24,7 +24,7 @@ interface VehicleDetail {
   hasGPS: boolean;
   imageUrl: string | null;
   activeBookings: number;
-  _count: { bookings: number };
+  _count: { Booking: number };
 }
 
 export default function EditarVehiculoPage() {
@@ -88,7 +88,7 @@ export default function EditarVehiculoPage() {
       {/* Booking stats */}
       <div className="flex gap-3 mb-6">
         <Badge variant="outline">
-          Total reservas: {vehicle._count.bookings}
+          Total reservas: {vehicle._count.Booking}
         </Badge>
         {vehicle.activeBookings > 0 && (
           <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">

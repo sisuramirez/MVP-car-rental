@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
     const bookings = await prisma.booking.findMany({
       where,
       include: {
-        customer: {
+        Customer: {
           select: {
             firstName: true,
             lastName: true,
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
             phone: true,
           },
         },
-        vehicle: {
+        Vehicle: {
           select: {
             brand: true,
             model: true,

@@ -8,6 +8,7 @@ export async function GET() {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // Use $transaction to batch all queries through a single connection
     const [
       totalBookings,
       pendientes,
@@ -21,7 +22,7 @@ export async function GET() {
       vehiclesDisponibles,
       vehiclesRentados,
       vehiclesMantenimiento,
-    ] = await Promise.all([
+    ] = await prisma.$transaction([
       prisma.booking.count(),
       prisma.booking.count({ where: { status: "PENDIENTE" } }),
       prisma.booking.count({ where: { status: "CONFIRMADO" } }),

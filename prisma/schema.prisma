@@ -26,7 +26,7 @@ model Booking {
   dropoffLocation    String
   specialRequests    String?
   createdAt          DateTime      @default(now())
-  updatedAt          DateTime
+  updatedAt          DateTime      @updatedAt
   cancelledAt        DateTime?
   cancellationReason String?
   Customer           Customer      @relation(fields: [customerId], references: [id])
@@ -52,7 +52,7 @@ model Customer {
   department    String?
   country       String    @default("Guatemala")
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime
+  updatedAt     DateTime  @updatedAt
   isBlacklisted Boolean   @default(false)
   Booking       Booking[]
 
@@ -79,7 +79,7 @@ model Vehicle {
   hasGPS            Boolean           @default(false)
   imageUrl          String?
   createdAt         DateTime          @default(now())
-  updatedAt         DateTime
+  updatedAt         DateTime          @updatedAt
   Booking           Booking[]
 
   @@index([category])

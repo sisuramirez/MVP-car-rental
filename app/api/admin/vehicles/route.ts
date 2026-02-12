@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const vehicles = await prisma.vehicle.findMany({
       where,
       include: {
-        bookings: {
+        Booking: {
           where: {
             status: { in: ["ACTIVO", "CONFIRMADO", "PENDIENTE"] },
             endDate: { gte: new Date() },
@@ -28,13 +28,13 @@ export async function GET(request: NextRequest) {
             startDate: true,
             endDate: true,
             status: true,
-            customer: {
+            Customer: {
               select: { firstName: true, lastName: true },
             },
           },
         },
         _count: {
-          select: { bookings: true },
+          select: { Booking: true },
         },
       },
       orderBy: [{ status: "asc" }, { brand: "asc" }],

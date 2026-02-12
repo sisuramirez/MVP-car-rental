@@ -63,7 +63,7 @@ export async function PATCH(
     const updatedBooking = await prisma.booking.update({
       where: { id: bookingId },
       data: updateData,
-      include: { vehicle: true, customer: true },
+      include: { Vehicle: true, Customer: true },
     });
 
     // Update vehicle status based on booking transition

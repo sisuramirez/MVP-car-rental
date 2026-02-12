@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const vehicle = await prisma.vehicle.findUnique({
       where: { id: data.vehicleId },
       include: {
-        bookings: {
+        Booking: {
           where: {
             AND: [
               { startDate: { lte: endDate } },
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (vehicle.bookings.length > 0) {
+    if (vehicle.Booking.length > 0) {
       return NextResponse.json(
         {
           error:
@@ -137,8 +137,8 @@ export async function POST(request: NextRequest) {
         paymentStatus: "PENDIENTE",
       },
       include: {
-        customer: true,
-        vehicle: true,
+        Customer: true,
+        Vehicle: true,
       },
     });
 
@@ -159,17 +159,17 @@ export async function POST(request: NextRequest) {
         specialRequests: booking.specialRequests,
       },
       customer: {
-        firstName: booking.customer.firstName,
-        lastName: booking.customer.lastName,
-        email: booking.customer.email,
-        phone: booking.customer.phone,
+        firstName: booking.Customer.firstName,
+        lastName: booking.Customer.lastName,
+        email: booking.Customer.email,
+        phone: booking.Customer.phone,
       },
       vehicle: {
-        brand: booking.vehicle.brand,
-        model: booking.vehicle.model,
-        year: booking.vehicle.year,
-        plateNumber: booking.vehicle.plateNumber,
-        imageUrl: booking.vehicle.imageUrl,
+        brand: booking.Vehicle.brand,
+        model: booking.Vehicle.model,
+        year: booking.Vehicle.year,
+        plateNumber: booking.Vehicle.plateNumber,
+        imageUrl: booking.Vehicle.imageUrl,
       },
     });
   } catch (error) {

@@ -17,9 +17,9 @@ export async function GET(
       where: { id },
       include: {
         _count: {
-          select: { bookings: true },
+          select: { Booking: true },
         },
-        bookings: {
+        Booking: {
           where: { status: "ACTIVO" },
           select: { id: true },
         },
@@ -33,10 +33,10 @@ export async function GET(
       );
     }
 
-    const { bookings, ...rest } = vehicle;
+    const { Booking, ...rest } = vehicle;
     return NextResponse.json({
       ...rest,
-      activeBookings: bookings.length,
+      activeBookings: Booking.length,
     });
   } catch (error) {
     console.error("Error fetching vehicle:", error);

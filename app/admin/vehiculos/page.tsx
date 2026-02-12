@@ -21,14 +21,14 @@ interface VehicleRow {
   status: string;
   transmission: string;
   passengerCapacity: number;
-  bookings: {
+  Booking: {
     id: number;
     startDate: string;
     endDate: string;
     status: string;
     customer: { firstName: string; lastName: string };
   }[];
-  _count: { bookings: number };
+  _count: { Booking: number };
 }
 
 const STATUS_OPTIONS = [
@@ -241,7 +241,7 @@ export default function AdminVehiculosPage() {
                         </span>
                       )}
                     </td>
-                    <td className="p-3 text-center">{v._count.bookings}</td>
+                    <td className="p-3 text-center">{v._count.Booking}</td>
                     <td className="p-3">
                       <div className="flex gap-1 justify-center">
                         <Button

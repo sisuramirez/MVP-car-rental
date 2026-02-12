@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
   const vehicles = await prisma.vehicle.findMany({
     where: {
       status: "DISPONIBLE",
-      bookings: {
+      Booking: {
         none: {
           AND: [
             { startDate: { lte: endDate } },

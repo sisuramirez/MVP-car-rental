@@ -18,8 +18,8 @@ export async function GET(
     const booking = await prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
-        customer: true,
-        vehicle: true,
+        Customer: true,
+        Vehicle: true,
       },
     });
 
@@ -47,25 +47,25 @@ export async function GET(
       specialRequests: booking.specialRequests,
       createdAt: booking.createdAt.toISOString(),
       customer: {
-        firstName: booking.customer.firstName,
-        lastName: booking.customer.lastName,
-        email: booking.customer.email,
-        phone: booking.customer.phone,
-        dpi: booking.customer.dpi,
+        firstName: booking.Customer.firstName,
+        lastName: booking.Customer.lastName,
+        email: booking.Customer.email,
+        phone: booking.Customer.phone,
+        dpi: booking.Customer.dpi,
       },
       vehicle: {
-        id: booking.vehicle.id,
-        brand: booking.vehicle.brand,
-        model: booking.vehicle.model,
-        year: booking.vehicle.year,
-        plateNumber: booking.vehicle.plateNumber,
-        category: booking.vehicle.category,
-        transmission: booking.vehicle.transmission,
-        fuelType: booking.vehicle.fuelType,
-        passengerCapacity: booking.vehicle.passengerCapacity,
-        hasAC: booking.vehicle.hasAC,
-        hasGPS: booking.vehicle.hasGPS,
-        imageUrl: booking.vehicle.imageUrl,
+        id: booking.Vehicle.id,
+        brand: booking.Vehicle.brand,
+        model: booking.Vehicle.model,
+        year: booking.Vehicle.year,
+        plateNumber: booking.Vehicle.plateNumber,
+        category: booking.Vehicle.category,
+        transmission: booking.Vehicle.transmission,
+        fuelType: booking.Vehicle.fuelType,
+        passengerCapacity: booking.Vehicle.passengerCapacity,
+        hasAC: booking.Vehicle.hasAC,
+        hasGPS: booking.Vehicle.hasGPS,
+        imageUrl: booking.Vehicle.imageUrl,
       },
     });
   } catch (error) {
