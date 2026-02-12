@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ const STATUS_OPTIONS = [
   { value: "CANCELADO", label: "Canceladas" },
 ];
 
-export default function AdminReservasPage() {
+function AdminReservasContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("status") || "ALL";
@@ -155,5 +155,13 @@ export default function AdminReservasPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminReservasPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Cargando...</div>}>
+      <AdminReservasContent />
+    </Suspense>
   );
 }

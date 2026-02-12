@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ const CATEGORY_OPTIONS = [
   { value: "VAN", label: "Van" },
 ];
 
-export default function AdminVehiculosPage() {
+function AdminVehiculosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("status") || "ALL";
@@ -339,5 +339,13 @@ export default function AdminVehiculosPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminVehiculosPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Cargando...</div>}>
+      <AdminVehiculosContent />
+    </Suspense>
   );
 }
