@@ -10,14 +10,14 @@ interface CalendarBooking {
   startDate: string;
   endDate: string;
   status: string;
-  vehicle: {
+  Vehicle: {
     id: number;
     brand: string;
     model: string;
     plateNumber: string;
     category: string;
   };
-  customer: {
+  Customer: {
     firstName: string;
     lastName: string;
   };
@@ -183,10 +183,10 @@ export default function AdminCalendarioPage() {
                           <div
                             key={b.id}
                             className={`text-[10px] px-1 rounded truncate ${
-                              CATEGORY_COLORS[b.vehicle.category] || "bg-gray-100"
+                              CATEGORY_COLORS[b.Vehicle.category] || "bg-gray-100"
                             }`}
                           >
-                            {b.vehicle.brand} {b.vehicle.model}
+                            {b.Vehicle.brand} {b.Vehicle.model}
                           </div>
                         ))}
                         {dayBookings.length > 3 && (
@@ -232,19 +232,19 @@ export default function AdminCalendarioPage() {
                     <div className="flex items-center gap-2 mb-1">
                       <div
                         className={`w-2 h-2 rounded-full ${
-                          CATEGORY_COLORS[b.vehicle.category]?.split(" ")[0] ||
+                          CATEGORY_COLORS[b.Vehicle.category]?.split(" ")[0] ||
                           "bg-gray-300"
                         }`}
                       />
                       <span className="font-semibold text-sm">
-                        {b.vehicle.brand} {b.vehicle.model}
+                        {b.Vehicle.brand} {b.Vehicle.model}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {b.customer.firstName} {b.customer.lastName}
+                      {b.Customer.firstName} {b.Customer.lastName}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {b.vehicle.plateNumber} · #{b.id}
+                      {b.Vehicle.plateNumber} · #{b.id}
                     </p>
                   </a>
                 ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import VehicleCard from "@/components/VehicleCard";
@@ -31,7 +31,7 @@ interface VehicleWithPricing {
   pricing: Pricing;
 }
 
-export default function VehiculosPage() {
+function VehiculosContent() {
   const searchParams = useSearchParams();
   const inicio = searchParams.get("inicio");
   const fin = searchParams.get("fin");
@@ -103,5 +103,13 @@ export default function VehiculosPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function VehiculosPage() {
+  return (
+    <Suspense fallback={<div className="max-w-6xl mx-auto px-4 py-12 text-center">Cargando...</div>}>
+      <VehiculosContent />
+    </Suspense>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -26,7 +28,7 @@ interface VehicleRow {
     startDate: string;
     endDate: string;
     status: string;
-    customer: { firstName: string; lastName: string };
+    Customer: { firstName: string; lastName: string };
   }[];
   _count: { Booking: number };
 }
@@ -201,7 +203,7 @@ export default function AdminVehiculosPage() {
             </thead>
             <tbody>
               {vehicles.map((v) => {
-                const activeBooking = v.bookings[0] || null;
+                const activeBooking = v.Booking[0] || null;
                 return (
                   <tr key={v.id} className="border-t hover:bg-muted/30">
                     <td className="p-3 font-mono">{v.plateNumber}</td>
@@ -228,8 +230,8 @@ export default function AdminVehiculosPage() {
                         >
                           <p className="text-xs">
                             #{activeBooking.id} -{" "}
-                            {activeBooking.customer.firstName}{" "}
-                            {activeBooking.customer.lastName}
+                            {activeBooking.Customer.firstName}{" "}
+                            {activeBooking.Customer.lastName}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Hasta {formatDateTime(activeBooking.endDate)}

@@ -27,7 +27,6 @@ export async function uploadVehicleImage(file: File): Promise<string> {
     console.error("Error details:", {
       message: error.message,
       statusCode: error.statusCode,
-      error: error.error,
       bucket: VEHICLE_IMAGES_BUCKET,
       filename: filename,
     });

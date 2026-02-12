@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,13 @@ interface BookingRow {
   status: string;
   paymentStatus: string;
   createdAt: string;
-  customer: {
+  Customer: {
     firstName: string;
     lastName: string;
     email: string;
     phone: string;
   };
-  vehicle: {
+  Vehicle: {
     brand: string;
     model: string;
     year: number;
@@ -119,18 +119,18 @@ export default function AdminReservasPage() {
                   <td className="p-3 font-mono">#{b.id}</td>
                   <td className="p-3">
                     <div>
-                      {b.customer.firstName} {b.customer.lastName}
+                      {b.Customer.firstName} {b.Customer.lastName}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {b.customer.email}
+                      {b.Customer.email}
                     </div>
                   </td>
                   <td className="p-3">
                     <div>
-                      {b.vehicle.brand} {b.vehicle.model}
+                      {b.Vehicle.brand} {b.Vehicle.model}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {b.vehicle.plateNumber}
+                      {b.Vehicle.plateNumber}
                     </div>
                   </td>
                   <td className="p-3 whitespace-nowrap">
