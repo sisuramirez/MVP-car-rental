@@ -28,6 +28,7 @@ interface VehicleWithPricing {
   hasAC: boolean;
   hasGPS: boolean;
   dailyRate1_2: number;
+  imageUrl: string | null;
   pricing: Pricing;
 }
 
