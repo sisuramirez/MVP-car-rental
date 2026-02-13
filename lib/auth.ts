@@ -1,6 +1,6 @@
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { SessionData, defaultSession, sessionOptions } from "./session";
 
 export async function getSession() {
