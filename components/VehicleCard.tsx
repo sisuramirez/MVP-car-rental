@@ -152,8 +152,8 @@ export default function VehicleCard({
         )}
       </CardContent>
 
-      <CardFooter>
-        {showPrice && inicio && fin ? (
+      {showPrice && inicio && fin && (
+        <CardFooter>
           <Button asChild className="w-full">
             <Link
               href={`/reservar/${vehicle.id}?inicio=${inicio}&fin=${fin}`}
@@ -161,12 +161,8 @@ export default function VehicleCard({
               Reservar
             </Link>
           </Button>
-        ) : (
-          <Button variant="outline" className="w-full" disabled>
-            Ver Detalles
-          </Button>
-        )}
-      </CardFooter>
+        </CardFooter>
+      )}
     </Card>
   );
 }
