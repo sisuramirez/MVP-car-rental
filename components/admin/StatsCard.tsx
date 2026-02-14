@@ -16,7 +16,7 @@ export function StatsCard({
   className,
 }: StatsCardProps) {
   return (
-    <Card className={className}>
+    <Card className={`w-full lg:flex-1 ${className || ""}`}>
       <CardContent className="pt-6">
         <div className="flex items-start justify-between">
           <div>

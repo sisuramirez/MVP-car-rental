@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import ConditionalNavbar from "@/components/ConditionalNavbar";
 import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
+        <ConditionalNavbar />
         <main className="min-h-[calc(100vh-4rem)]">{children}</main>
         <footer className="border-t py-6 text-center text-sm text-muted-foreground">
           <p>RentaCar GT - Guatemala</p>
