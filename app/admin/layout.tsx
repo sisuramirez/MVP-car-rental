@@ -38,9 +38,6 @@ export default function AdminLayout({
     }
   }
 
-  // Only show mobile navbar on dashboard page (/admin)
-  const showMobileNavbar = pathname === "/admin";
-
   return (
     <div className="flex min-h-screen">
       {/* Desktop Sidebar - Always visible on desktop (≥1024px) */}
@@ -93,9 +90,8 @@ export default function AdminLayout({
 
       {/* Main content wrapper */}
       <div className="flex-1 flex flex-col">
-        {/* Mobile/Tablet Top Navbar - Only on Dashboard and only < 1024px */}
-        {showMobileNavbar && (
-          <header className="lg:hidden border-b bg-white sticky top-0 z-40">
+        {/* Mobile/Tablet Top Navbar - Visible on ALL admin pages < 1024px */}
+        <header className="lg:hidden border-b bg-white sticky top-0 z-40">
             <div className="h-16 px-4 flex items-center justify-center relative">
               {/* Mobile/Tablet Menu Button - Left side */}
               <button
@@ -129,7 +125,6 @@ export default function AdminLayout({
               </div>
             </div>
           </header>
-        )}
 
         {/* Mobile/Tablet Fullscreen Menu Overlay - Only < 1024px */}
         {mobileMenuOpen && (

@@ -140,142 +140,222 @@ function AdminVehiculosContent() {
   }
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Vehículos</h1>
-        <Button asChild>
-          <Link href="/admin/vehiculos/nuevo">+ Agregar Vehículo</Link>
-        </Button>
-      </div>
+    <div className="py-6">
+      {/* Container centrado con responsive width */}
+      <div className="w-[85%] mx-auto max-w-[1200px] lg:w-[80%]">
+        {/* Header - Title y botón */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold mb-4">Vehículos</h1>
+          {/* Botón full width en mobile, auto en desktop */}
+          <Button asChild className="w-full lg:w-auto">
+            <Link href="/admin/vehiculos/nuevo">+ Agregar Vehículo</Link>
+          </Button>
+        </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-6 mb-6">
-        <div>
-          <p className="text-xs text-muted-foreground mb-2">Estado</p>
-          <div className="flex gap-1">
-            {STATUS_OPTIONS.map((opt) => (
-              <Button
-                key={opt.value}
-                variant={statusFilter === opt.value ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilter("status", opt.value)}
-              >
-                {opt.label}
-              </Button>
-            ))}
+        {/* Filters - Flex wrap, NO horizontal scroll */}
+        <div className="mb-6 space-y-4">
+          <div>
+            <p className="text-xs text-muted-foreground mb-2 text-center lg:text-left">Estado</p>
+            <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
+              {STATUS_OPTIONS.map((opt) => (
+                <Button
+                  key={opt.value}
+                  variant={statusFilter === opt.value ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFilter("status", opt.value)}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground mb-2 text-center lg:text-left">Categoría</p>
+            <div className="flex gap-2 flex-wrap justify-center lg:justify-start">
+              {CATEGORY_OPTIONS.map((opt) => (
+                <Button
+                  key={opt.value}
+                  variant={categoryFilter === opt.value ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setFilter("category", opt.value)}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
-        <div>
-          <p className="text-xs text-muted-foreground mb-2">Categoría</p>
-          <div className="flex gap-1">
-            {CATEGORY_OPTIONS.map((opt) => (
-              <Button
-                key={opt.value}
-                variant={categoryFilter === opt.value ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilter("category", opt.value)}
-              >
-                {opt.label}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div>
 
-      {/* Table */}
-      {loading ? (
-        <p className="text-muted-foreground py-8">Cargando vehículos...</p>
-      ) : (
-        <div className="border rounded-lg overflow-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr>
-                <th className="text-left p-3 font-medium">Placa</th>
-                <th className="text-left p-3 font-medium">Vehículo</th>
-                <th className="text-left p-3 font-medium">Categoría</th>
-                <th className="text-left p-3 font-medium">Transmisión</th>
-                <th className="text-center p-3 font-medium">Pasajeros</th>
-                <th className="text-left p-3 font-medium">Estado</th>
-                <th className="text-left p-3 font-medium">Reserva Actual</th>
-                <th className="text-center p-3 font-medium">Total</th>
-                <th className="text-center p-3 font-medium">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vehicles.map((v) => {
-                const activeBooking = v.Booking[0] || null;
-                return (
-                  <tr key={v.id} className="border-t hover:bg-muted/30">
-                    <td className="p-3 font-mono">{v.plateNumber}</td>
-                    <td className="p-3 font-semibold">
-                      {v.brand} {v.model} {v.year}
-                    </td>
-                    <td className="p-3">{CATEGORY_LABELS[v.category]}</td>
-                    <td className="p-3">
-                      {TRANSMISSION_LABELS[v.transmission]}
-                    </td>
-                    <td className="p-3 text-center">{v.passengerCapacity}</td>
-                    <td className="p-3">
-                      <VehicleStatusBadge status={v.status} />
-                    </td>
-                    <td className="p-3">
-                      {activeBooking ? (
-                        <div
-                          className="cursor-pointer hover:underline"
-                          onClick={() =>
-                            router.push(
-                              `/admin/reservas/${activeBooking.id}`
-                            )
-                          }
-                        >
-                          <p className="text-xs">
-                            #{activeBooking.id} -{" "}
-                            {activeBooking.Customer.firstName}{" "}
-                            {activeBooking.Customer.lastName}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            Hasta {formatDateTime(activeBooking.endDate)}
-                          </p>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">
-                          —
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-3 text-center">{v._count.Booking}</td>
-                    <td className="p-3">
-                      <div className="flex gap-1 justify-center">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            router.push(
-                              `/admin/vehiculos/${v.id}/editar`
-                            )
-                          }
-                        >
-                          Editar
-                        </Button>
-                        {v.status !== "RETIRADO" && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                            onClick={() => handleDeleteClick(v)}
-                          >
-                            Retirar
-                          </Button>
-                        )}
-                      </div>
-                    </td>
+        {/* Content */}
+        {loading ? (
+          <p className="text-muted-foreground py-8 text-center">Cargando vehículos...</p>
+        ) : (
+          <>
+            {/* Desktop Table - Hidden on mobile */}
+            <div className="hidden lg:block border rounded-lg overflow-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr>
+                    <th className="text-left p-3 font-medium">Placa</th>
+                    <th className="text-left p-3 font-medium">Vehículo</th>
+                    <th className="text-left p-3 font-medium">Categoría</th>
+                    <th className="text-left p-3 font-medium">Transmisión</th>
+                    <th className="text-center p-3 font-medium">Pasajeros</th>
+                    <th className="text-left p-3 font-medium">Estado</th>
+                    <th className="text-left p-3 font-medium">Reserva Actual</th>
+                    <th className="text-center p-3 font-medium">Total</th>
+                    <th className="text-center p-3 font-medium">Acciones</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
+                </thead>
+                <tbody>
+                  {vehicles.map((v) => {
+                    const activeBooking = v.Booking[0] || null;
+                    return (
+                      <tr key={v.id} className="border-t hover:bg-muted/30">
+                        <td className="p-3 font-mono">{v.plateNumber}</td>
+                        <td className="p-3 font-semibold">
+                          {v.brand} {v.model} {v.year}
+                        </td>
+                        <td className="p-3">{CATEGORY_LABELS[v.category]}</td>
+                        <td className="p-3">
+                          {TRANSMISSION_LABELS[v.transmission]}
+                        </td>
+                        <td className="p-3 text-center">{v.passengerCapacity}</td>
+                        <td className="p-3">
+                          <VehicleStatusBadge status={v.status} />
+                        </td>
+                        <td className="p-3">
+                          {activeBooking ? (
+                            <div
+                              className="cursor-pointer hover:underline"
+                              onClick={() =>
+                                router.push(
+                                  `/admin/reservas/${activeBooking.id}`
+                                )
+                              }
+                            >
+                              <p className="text-xs">
+                                #{activeBooking.id} -{" "}
+                                {activeBooking.Customer.firstName}{" "}
+                                {activeBooking.Customer.lastName}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                Hasta {formatDateTime(activeBooking.endDate)}
+                              </p>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-3 text-center">{v._count.Booking}</td>
+                        <td className="p-3">
+                          <div className="flex gap-1 justify-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                router.push(
+                                  `/admin/vehiculos/${v.id}/editar`
+                                )
+                              }
+                            >
+                              Editar
+                            </Button>
+                            {v.status !== "RETIRADO" && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                onClick={() => handleDeleteClick(v)}
+                              >
+                                Retirar
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards - Visible only on mobile */}
+            <div className="lg:hidden space-y-4">
+              {vehicles.map((v) => (
+                <div
+                  key={v.id}
+                  className="border rounded-lg p-4 shadow-sm"
+                >
+                  {/* Top: Vehicle name + Placa */}
+                  <div className="mb-3">
+                    <div className="font-bold text-base">
+                      {v.brand} {v.model} {v.year}
+                    </div>
+                    <div className="text-sm text-muted-foreground font-mono">
+                      {v.plateNumber}
+                    </div>
+                  </div>
+
+                  {/* Middle: 2-column grid */}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm mb-4">
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">
+                        Categoría
+                      </div>
+                      <div>{CATEGORY_LABELS[v.category]}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">
+                        Transmisión
+                      </div>
+                      <div>{TRANSMISSION_LABELS[v.transmission]}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">
+                        Pasajeros
+                      </div>
+                      <div>{v.passengerCapacity}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-muted-foreground mb-1">
+                        Estado
+                      </div>
+                      <VehicleStatusBadge status={v.status} />
+                    </div>
+                  </div>
+
+                  {/* Bottom: Action buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() =>
+                        router.push(`/admin/vehiculos/${v.id}/editar`)
+                      }
+                    >
+                      Editar
+                    </Button>
+                    {v.status !== "RETIRADO" && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        onClick={() => handleDeleteClick(v)}
+                      >
+                        Retirar
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Delete Confirmation Dialog */}
       {deleteDialog && (
