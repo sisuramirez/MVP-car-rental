@@ -138,7 +138,7 @@ export default function AdminLayout({
             {/* Menu Panel - Slides from left */}
             <div
               className={cn(
-                "fixed inset-y-0 left-0 w-full bg-white z-50 flex flex-col lg:hidden",
+                "fixed inset-y-0 left-0 w-full max-w-sm bg-white z-50 flex flex-col lg:hidden shadow-2xl",
                 "animate-in slide-in-from-left duration-300"
               )}
             >

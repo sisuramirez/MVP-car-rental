@@ -13,6 +13,7 @@ interface VehicleDetail {
   model: string;
   year: number;
   category: string;
+  status: string;
   dailyRate1_2: number;
   dailyRate3_6: number;
   weeklyRate: number;

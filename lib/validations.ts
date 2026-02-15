@@ -46,6 +46,7 @@ export const vehicleSchema = z.object({
     .min(2020, "Año mínimo: 2020")
     .max(new Date().getFullYear() + 1, "Año inválido"),
   category: z.enum(["ECONOMICO", "SUV", "LUJO", "VAN"]),
+  status: z.enum(["DISPONIBLE", "RENTADO", "MANTENIMIENTO", "RETIRADO"]).default("DISPONIBLE"),
   dailyRate1_2: z.number().positive("Precio debe ser positivo"),
   dailyRate3_6: z.number().positive("Precio debe ser positivo"),
   weeklyRate: z.number().positive("Precio debe ser positivo"),

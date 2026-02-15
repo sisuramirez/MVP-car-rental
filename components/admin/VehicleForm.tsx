@@ -17,6 +17,7 @@ interface VehicleData {
   model: string;
   year: number;
   category: string;
+  status?: string;
   dailyRate1_2: number;
   dailyRate3_6: number;
   weeklyRate: number;
@@ -40,6 +41,7 @@ const defaultData: VehicleData = {
   model: "",
   year: new Date().getFullYear(),
   category: "ECONOMICO",
+  status: "DISPONIBLE",
   dailyRate1_2: 0,
   dailyRate3_6: 0,
   weeklyRate: 0,
@@ -62,6 +64,7 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
     model: data.model,
     year: data.year,
     category: data.category,
+    status: data.status || "DISPONIBLE",
     // Display in quetzales (divide centavos by 100)
     dailyRate1_2: data.dailyRate1_2 / 100,
     dailyRate3_6: data.dailyRate3_6 / 100,
@@ -105,6 +108,7 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
       formData.set("model", form.model);
       formData.set("year", String(form.year));
       formData.set("category", form.category);
+      formData.set("status", form.status);
       // Convert quetzales to centavos
       formData.set("dailyRate1_2", String(Math.round(form.dailyRate1_2 * 100)));
       formData.set("dailyRate3_6", String(Math.round(form.dailyRate3_6 * 100)));
@@ -210,20 +214,37 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="category">Categoría *</Label>
-            <select
-              id="category"
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              <option value="ECONOMICO">Económico</option>
-              <option value="SUV">SUV</option>
-              <option value="LUJO">Lujo</option>
-              <option value="VAN">Van</option>
-            </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="category">Categoría *</Label>
+              <select
+                id="category"
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="ECONOMICO">Económico</option>
+                <option value="SUV">SUV</option>
+                <option value="LUJO">Lujo</option>
+                <option value="VAN">Van</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="status">Estado *</Label>
+              <select
+                id="status"
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              >
+                <option value="DISPONIBLE">Disponible</option>
+                <option value="RENTADO">Rentado</option>
+                <option value="MANTENIMIENTO">Mantenimiento</option>
+                <option value="RETIRADO">Retirado</option>
+              </select>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -80,6 +80,7 @@ export async function PATCH(
       "brand",
       "model",
       "category",
+      "status",
       "transmission",
       "fuelType",
     ];

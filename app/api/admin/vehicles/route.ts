@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
       model: formData.get("model") as string,
       year: parseFormNumber(formData.get("year")),
       category: formData.get("category") as string,
+      status: (formData.get("status") as string) || "DISPONIBLE",
       dailyRate1_2: parseFormNumber(formData.get("dailyRate1_2")),
       dailyRate3_6: parseFormNumber(formData.get("dailyRate3_6")),
       weeklyRate: parseFormNumber(formData.get("weeklyRate")),
@@ -112,7 +113,6 @@ export async function POST(request: NextRequest) {
       data: {
         ...validation.data,
         imageUrl,
-        status: "DISPONIBLE",
       },
     });
 
