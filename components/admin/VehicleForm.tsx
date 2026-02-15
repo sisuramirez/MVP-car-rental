@@ -58,8 +58,31 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
   const { toast } = useToast();
   const data = initialData || defaultData;
 
+  // Parse existing plate number if in edit mode
+  const parsePlate = (plateNumber: string) => {
+    // Format: L-NNN-LLL (e.g., P-123-ABC)
+    const match = plateNumber.match(/^([A-Z])-(\d{3})-([A-Z]{3})$/);
+    if (match) {
+      return {
+        plateLetter: match[1],
+        plateNumbers: match[2],
+        plateLetters: match[3],
+      };
+    }
+    // Old format or default
+    return {
+      plateLetter: "P",
+      plateNumbers: "",
+      plateLetters: "",
+    };
+  };
+
+  const parsedPlate = parsePlate(data.plateNumber);
+
   const [form, setForm] = useState({
-    plateNumber: data.plateNumber,
+    plateLetter: parsedPlate.plateLetter,
+    plateNumbers: parsedPlate.plateNumbers,
+    plateLetters: parsedPlate.plateLetters,
     brand: data.brand,
     model: data.model,
     year: data.year,
@@ -102,8 +125,11 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
     setSubmitting(true);
 
     try {
+      // Construct plate number from parts
+      const plateNumber = `${form.plateLetter}-${form.plateNumbers}-${form.plateLetters}`;
+
       const formData = new FormData();
-      formData.set("plateNumber", form.plateNumber);
+      formData.set("plateNumber", plateNumber);
       formData.set("brand", form.brand);
       formData.set("model", form.model);
       formData.set("year", String(form.year));
@@ -160,33 +186,61 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
           <CardTitle className="text-lg">Información Básica</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="plateNumber">Placa *</Label>
-              <Input
-                id="plateNumber"
-                name="plateNumber"
-                required
-                value={form.plateNumber}
+          <div className="space-y-2">
+            <Label>Placa *</Label>
+            <div className="flex gap-2">
+              <select
+                id="plateLetter"
+                name="plateLetter"
+                value={form.plateLetter}
                 onChange={handleChange}
-                placeholder="P-123456"
-                pattern="P-\d{6}"
-                title="Formato: P-XXXXXX"
+                className="flex h-10 w-20 rounded-md border border-input bg-background px-3 py-2 text-base"
+                required
+              >
+                <option value="P">P</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="M">M</option>
+                <option value="O">O</option>
+                <option value="TC">TC</option>
+              </select>
+              <span className="flex items-center text-muted-foreground">-</span>
+              <Input
+                id="plateNumbers"
+                name="plateNumbers"
+                type="text"
+                inputMode="numeric"
+                pattern="\d{3}"
+                maxLength={3}
+                required
+                value={form.plateNumbers}
+                onChange={handleChange}
+                placeholder="123"
+                className="w-20"
+                title="3 números"
+              />
+              <span className="flex items-center text-muted-foreground">-</span>
+              <Input
+                id="plateLetters"
+                name="plateLetters"
+                type="text"
+                pattern="[A-Z]{3}"
+                maxLength={3}
+                required
+                value={form.plateLetters.toUpperCase()}
+                onChange={(e) => {
+                  const value = e.target.value.toUpperCase().replace(/[^A-Z]/g, '');
+                  setForm(f => ({ ...f, plateLetters: value }));
+                }}
+                placeholder="ABC"
+                className="w-24"
+                title="3 letras"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="year">Año *</Label>
-              <Input
-                id="year"
-                name="year"
-                type="number"
-                required
-                min={2020}
-                max={new Date().getFullYear() + 1}
-                value={form.year}
-                onChange={handleChange}
-              />
-            </div>
+            <p className="text-xs text-muted-foreground">
+              Formato: Letra - 3 números - 3 letras (ej: P-123-ABC)
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -210,6 +264,22 @@ export function VehicleForm({ mode, initialData }: VehicleFormProps) {
                 value={form.model}
                 onChange={handleChange}
                 placeholder="Corolla"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="year">Año *</Label>
+              <Input
+                id="year"
+                name="year"
+                type="number"
+                required
+                min={2020}
+                max={new Date().getFullYear() + 1}
+                value={form.year}
+                onChange={handleChange}
               />
             </div>
           </div>

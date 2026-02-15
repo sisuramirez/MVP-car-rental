@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { VehicleForm } from "@/components/admin/VehicleForm";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 interface VehicleDetail {
   id: number;
@@ -30,11 +31,14 @@ interface VehicleDetail {
 
 export default function EditarVehiculoPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
 
   const [vehicle, setVehicle] = useState<VehicleDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     fetch(`/api/admin/vehicles/${id}`)
@@ -51,6 +55,30 @@ export default function EditarVehiculoPage() {
         setLoading(false);
       });
   }, [id]);
+
+  async function handleMarkAsAvailable() {
+    setUpdating(true);
+    try {
+      const formData = new FormData();
+      formData.set("status", "DISPONIBLE");
+
+      const res = await fetch(`/api/admin/vehicles/${id}`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Error al actualizar vehículo");
+      }
+
+      router.push("/admin/vehiculos");
+      router.refresh();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Error al actualizar");
+      setUpdating(false);
+      setShowConfirmDialog(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -86,8 +114,8 @@ export default function EditarVehiculoPage() {
         Editar {vehicle.brand} {vehicle.model}
       </h1>
 
-      {/* Booking stats */}
-      <div className="flex gap-3 mb-6">
+      {/* Booking stats and maintenance button */}
+      <div className="flex gap-3 mb-6 items-center flex-wrap">
         <Badge variant="outline">
           Total reservas: {vehicle._count.Booking}
         </Badge>
@@ -96,7 +124,44 @@ export default function EditarVehiculoPage() {
             Reservas activas: {vehicle.activeBookings}
           </Badge>
         )}
+        {vehicle.status === "MANTENIMIENTO" && (
+          <Button
+            onClick={() => setShowConfirmDialog(true)}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            ✓ Marcar como Disponible
+          </Button>
+        )}
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Confirmar cambio de estado</h2>
+            <p className="text-muted-foreground mb-6">
+              ¿Estás seguro de enviar el auto a un estado disponible de nuevo?
+              El vehículo volverá a estar disponible para rentas.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowConfirmDialog(false)}
+                disabled={updating}
+              >
+                Cancelar
+              </Button>
+              <Button
+                onClick={handleMarkAsAvailable}
+                disabled={updating}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                {updating ? "Actualizando..." : "Sí, marcar como disponible"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <VehicleForm mode="edit" initialData={vehicle} />
     </div>

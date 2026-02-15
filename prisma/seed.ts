@@ -14,7 +14,7 @@ async function main() {
     // 1. Económico - Toyota Corolla 2023
     prisma.vehicle.create({
       data: {
-        plateNumber: "P-123456",
+        plateNumber: "P-123-ABC",
         brand: "Toyota",
         model: "Corolla",
         year: 2023,
@@ -36,7 +36,7 @@ async function main() {
     // 2. SUV - Honda CR-V 2024
     prisma.vehicle.create({
       data: {
-        plateNumber: "P-234567",
+        plateNumber: "P-234-BCD",
         brand: "Honda",
         model: "CR-V",
         year: 2024,
@@ -58,7 +58,7 @@ async function main() {
     // 3. Lujo - BMW 5 Series 2023
     prisma.vehicle.create({
       data: {
-        plateNumber: "P-345678",
+        plateNumber: "P-345-CDE",
         brand: "BMW",
         model: "Serie 5",
         year: 2023,
@@ -80,7 +80,7 @@ async function main() {
     // 4. Van - Toyota Sienna 2024
     prisma.vehicle.create({
       data: {
-        plateNumber: "P-456789",
+        plateNumber: "P-456-DEF",
         brand: "Toyota",
         model: "Sienna",
         year: 2024,
@@ -102,7 +102,7 @@ async function main() {
     // 5. Económico - Mazda 3 2023
     prisma.vehicle.create({
       data: {
-        plateNumber: "P-567890",
+        plateNumber: "P-567-EFG",
         brand: "Mazda",
         model: "3",
         year: 2023,

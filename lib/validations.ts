@@ -38,7 +38,7 @@ export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
 export const vehicleSchema = z.object({
   plateNumber: z
     .string()
-    .regex(/^P-\d{6}$/, "Formato de placa inválido. Use P-XXXXXX"),
+    .regex(/^[A-Z]{1,2}-\d{3}-[A-Z]{3}$/, "Formato de placa inválido. Use L-NNN-LLL (ej: P-123-ABC)"),
   brand: z.string().min(2, "Marca requerida"),
   model: z.string().min(1, "Modelo requerido"),
   year: z
