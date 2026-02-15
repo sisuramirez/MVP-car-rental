@@ -189,6 +189,15 @@ function AdminVehiculosContent() {
         {/* Content */}
         {loading ? (
           <p className="text-muted-foreground py-8 text-center">Cargando vehículos...</p>
+        ) : vehicles.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">No se encontraron vehículos</p>
+            <p className="text-sm text-muted-foreground mt-2">
+              {statusFilter !== "ALL" || categoryFilter !== "ALL"
+                ? "Intenta cambiar los filtros de búsqueda"
+                : "Agrega tu primer vehículo para comenzar"}
+            </p>
+          </div>
         ) : (
           <>
             {/* Desktop Table - Hidden on mobile */}
