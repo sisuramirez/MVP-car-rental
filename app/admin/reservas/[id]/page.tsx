@@ -16,6 +16,7 @@ import {
   TRANSMISSION_LABELS,
   FUEL_LABELS,
 } from "@/lib/format";
+import { useDemo } from "@/app/admin/DemoContext";
 
 const STATUS_TRANSITIONS: Record<
   string,
@@ -78,10 +79,12 @@ interface BookingDetail {
 export default function AdminReservaDetailPage() {
   const params = useParams();
   const bookingId = params.id as string;
+  const { isDemo } = useDemo();
 
   const [booking, setBooking] = useState<BookingDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [updatingPayment, setUpdatingPayment] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   function fetchBooking() {
@@ -104,6 +107,25 @@ export default function AdminReservaDetailPage() {
     fetchBooking();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingId]);
+
+  async function handlePaymentStatusChange(newPaymentStatus: string) {
+    setUpdatingPayment(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}/payment`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentStatus: newPaymentStatus }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error al actualizar pago");
+      fetchBooking();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al actualizar pago");
+    } finally {
+      setUpdatingPayment(false);
+    }
+  }
 
   async function handleStatusChange(newStatus: string) {
     if (!confirm(`¿Cambiar estado a ${newStatus}?`)) return;
@@ -178,7 +200,7 @@ export default function AdminReservaDetailPage() {
       )}
 
       {/* Status Actions */}
-      {actions.length > 0 && (
+      {!isDemo && actions.length > 0 && (
         <div className="flex gap-3 mb-6 p-4 bg-muted/30 rounded-lg border">
           <span className="text-sm text-muted-foreground self-center mr-2">
             Acciones:
@@ -319,7 +341,21 @@ export default function AdminReservaDetailPage() {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-muted-foreground">Estado de pago</span>
-              <PaymentBadge status={booking.paymentStatus} />
+              {isDemo ? (
+                <PaymentBadge status={booking.paymentStatus} />
+              ) : (
+                <select
+                  value={booking.paymentStatus}
+                  disabled={updatingPayment}
+                  onChange={(e) => handlePaymentStatusChange(e.target.value)}
+                  className="text-xs border rounded px-2 py-1 bg-white cursor-pointer disabled:opacity-50"
+                >
+                  <option value="PENDIENTE">Pendiente</option>
+                  <option value="PARCIAL">Parcial</option>
+                  <option value="PAGADO">Pagado</option>
+                  <option value="REEMBOLSADO">Reembolsado</option>
+                </select>
+              )}
             </div>
           </CardContent>
         </Card>

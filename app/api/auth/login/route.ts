@@ -45,9 +45,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const isValid = await validateCredentials(username, password);
+    const result = await validateCredentials(username, password);
 
-    if (!isValid) {
+    if (!result) {
       return NextResponse.json(
         { error: "Usuario o contraseña incorrectos" },
         { status: 401 }
@@ -58,6 +58,7 @@ export async function POST(request: Request) {
     session.isAuthenticated = true;
     session.username = username;
     session.loginTime = Date.now();
+    session.role = result.role;
     await session.save();
 
     return NextResponse.json({ success: true });

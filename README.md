@@ -110,4 +110,4 @@ MIT
 
 ---
 
-Desarrollado con ❤️ para el mercado guatemalteco
+

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { vehicleUpdateSchema } from "@/lib/validations";
 import { uploadVehicleImage, deleteVehicleImage } from "@/lib/upload";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
@@ -57,6 +58,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const guard = await requireAdmin();
+  if (guard instanceof NextResponse) return guard;
+
   try {
     const id = parseInt(params.id);
     if (isNaN(id)) {
@@ -172,6 +176,9 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const guard = await requireAdmin();
+  if (guard instanceof NextResponse) return guard;
+
   try {
     const id = parseInt(params.id);
     if (isNaN(id)) {

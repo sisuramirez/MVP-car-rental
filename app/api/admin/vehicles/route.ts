@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { vehicleSchema } from "@/lib/validations";
 import { uploadVehicleImage } from "@/lib/upload";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -55,6 +56,9 @@ function parseFormNumber(value: FormDataEntryValue | null): number {
 }
 
 export async function POST(request: NextRequest) {
+  const guard = await requireAdmin();
+  if (guard instanceof NextResponse) return guard;
+
   try {
     const formData = await request.formData();
 

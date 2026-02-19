@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { EstadoReserva } from "@prisma/client";
+import { requireAdmin } from "@/lib/auth";
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   PENDIENTE: ["CONFIRMADO", "CANCELADO"],
@@ -14,6 +15,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const guard = await requireAdmin();
+  if (guard instanceof NextResponse) return guard;
+
   try {
     const bookingId = parseInt(params.id);
     if (isNaN(bookingId)) {

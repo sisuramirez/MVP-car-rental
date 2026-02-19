@@ -12,6 +12,7 @@ import {
   CATEGORY_LABELS,
   TRANSMISSION_LABELS,
 } from "@/lib/format";
+import { useDemo } from "@/app/admin/DemoContext";
 
 interface VehicleRow {
   id: number;
@@ -54,6 +55,7 @@ function AdminVehiculosContent() {
   const searchParams = useSearchParams();
   const statusFilter = searchParams.get("status") || "ALL";
   const categoryFilter = searchParams.get("category") || "ALL";
+  const { isDemo } = useDemo();
 
   const [vehicles, setVehicles] = useState<VehicleRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,9 +149,11 @@ function AdminVehiculosContent() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold mb-4">Vehículos</h1>
           {/* Botón full width en mobile, auto en desktop */}
-          <Button asChild className="w-full lg:w-auto">
-            <Link href="/admin/vehiculos/nuevo">+ Agregar Vehículo</Link>
-          </Button>
+          {!isDemo && (
+            <Button asChild className="w-full lg:w-auto">
+              <Link href="/admin/vehiculos/nuevo">+ Agregar Vehículo</Link>
+            </Button>
+          )}
         </div>
 
         {/* Filters - Flex wrap, NO horizontal scroll */}
@@ -261,18 +265,20 @@ function AdminVehiculosContent() {
                         <td className="p-3 text-center">{v._count.Booking}</td>
                         <td className="p-3">
                           <div className="flex gap-1 justify-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() =>
-                                router.push(
-                                  `/admin/vehiculos/${v.id}/editar`
-                                )
-                              }
-                            >
-                              Editar
-                            </Button>
-                            {v.status !== "RETIRADO" && (
+                            {!isDemo && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  router.push(
+                                    `/admin/vehiculos/${v.id}/editar`
+                                  )
+                                }
+                              >
+                                Editar
+                              </Button>
+                            )}
+                            {!isDemo && v.status !== "RETIRADO" && (
                               <Button
                                 variant="outline"
                                 size="sm"
@@ -337,28 +343,30 @@ function AdminVehiculosContent() {
                   </div>
 
                   {/* Bottom: Action buttons */}
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1"
-                      onClick={() =>
-                        router.push(`/admin/vehiculos/${v.id}/editar`)
-                      }
-                    >
-                      Editar
-                    </Button>
-                    {v.status !== "RETIRADO" && (
+                  {!isDemo && (
+                    <div className="flex gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => handleDeleteClick(v)}
+                        className="flex-1"
+                        onClick={() =>
+                          router.push(`/admin/vehiculos/${v.id}/editar`)
+                        }
                       >
-                        Retirar
+                        Editar
                       </Button>
-                    )}
-                  </div>
+                      {v.status !== "RETIRADO" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => handleDeleteClick(v)}
+                        >
+                          Retirar
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

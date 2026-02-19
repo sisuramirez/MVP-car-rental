@@ -6,6 +6,7 @@ import Link from "next/link";
 import { VehicleForm } from "@/components/admin/VehicleForm";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useDemo } from "@/app/admin/DemoContext";
 
 interface VehicleDetail {
   id: number;
@@ -33,6 +34,7 @@ export default function EditarVehiculoPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
+  const { isDemo } = useDemo();
 
   const [vehicle, setVehicle] = useState<VehicleDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,6 +43,10 @@ export default function EditarVehiculoPage() {
   const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
+    if (isDemo) {
+      router.replace("/admin/vehiculos");
+      return;
+    }
     fetch(`/api/admin/vehicles/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error("Vehículo no encontrado");
@@ -54,7 +60,7 @@ export default function EditarVehiculoPage() {
         setError(err.message);
         setLoading(false);
       });
-  }, [id]);
+  }, [id, isDemo, router]);
 
   async function handleMarkAsAvailable() {
     setUpdating(true);

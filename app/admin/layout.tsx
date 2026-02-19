@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { DemoProvider, useDemo } from "./DemoContext";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
@@ -11,6 +12,16 @@ const NAV_ITEMS = [
   { href: "/admin/vehiculos", label: "Vehículos", icon: "🚗" },
   { href: "/admin/calendario", label: "Calendario", icon: "📅" },
 ];
+
+function DemoBanner() {
+  const { isDemo } = useDemo();
+  if (!isDemo) return null;
+  return (
+    <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center text-sm text-amber-800">
+      ⚠️ Estás viendo una cuenta de demostración — contáctanos para obtener tu propio sistema
+    </div>
+  );
+}
 
 export default function AdminLayout({
   children,
@@ -39,6 +50,7 @@ export default function AdminLayout({
   }
 
   return (
+    <DemoProvider>
     <div className="flex min-h-screen">
       {/* Desktop Sidebar - Always visible on desktop (≥1024px) */}
       <aside className="hidden lg:flex lg:w-56 border-r bg-muted/30 flex-shrink-0 flex-col">
@@ -231,9 +243,11 @@ export default function AdminLayout({
           </>
         )}
 
-        {/* Main content */}
+        {/* Demo banner + Main content */}
+        <DemoBanner />
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
+    </DemoProvider>
   );
 }

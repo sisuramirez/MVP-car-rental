@@ -1,15 +1,19 @@
 import { SessionOptions } from "iron-session";
 
+export type UserRole = "admin" | "demo";
+
 export interface SessionData {
   isAuthenticated: boolean;
   username: string;
   loginTime: number;
+  role: UserRole;
 }
 
 export const defaultSession: SessionData = {
   isAuthenticated: false,
   username: "",
   loginTime: 0,
+  role: "admin",
 };
 
 export const sessionOptions: SessionOptions = {
